@@ -1,0 +1,14 @@
+{
+    "apps" : [{
+      "name"              : "Stores-Manager",
+      "script"            : "./bin/www",
+      "exec_mode"         : "fork",
+      "exex_interpreter"  : "babel-node",
+      "instances"         : 1,
+      "merge_logs"        : true,
+      "env": {
+        "PORT"            : 4005,
+        "MONITORING"      : false
+      }
+    }]
+}

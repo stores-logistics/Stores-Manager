@@ -1,0 +1,39 @@
+version: '2.1'
+
+services:
+  mysql:
+    build: ./db_stuff
+    command: --default-authentication-plugin=mysql_native_password
+    expose:
+      - 3306
+    restart: always
+    healthcheck:
+      test: "exit 0"
+    networks:
+      - my-network
+    
+  storesmicro:
+    build: .
+    links:
+      - 'mysql'
+    depends_on: 
+      mysql:
+        condition: service_healthy
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_DATABASE=storesdb
+      - MYSQL_USER=storeuser
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - WAIT_HOSTS=mysql:3306
+    entrypoint:
+      - /usr/local/bin/docker-entrypoint.sh
+    ports:
+      - "4005:4005"
+    networks:
+      - my-network
+    
+networks:
+  my-network:
+    name: net
